@@ -16,17 +16,8 @@ app.use(cors());
 
 app.use("/api", routes);
 
-app.use((req, res) => {
-  res.status(404).json({ message: "Route topilmadi" });
-});
 
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).json({
-    message: "Serverda ichki xatolik yuz berdi",
-    error: process.env.NODE_ENV === "development" ? err.message : {},
-  });
-});
+
 
 const start = async () => {
   try {

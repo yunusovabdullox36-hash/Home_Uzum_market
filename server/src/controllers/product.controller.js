@@ -33,7 +33,7 @@ class ProductController {
       return res.json(product);
     } catch (err) {
       if (err.name === 'CastError') {
-        return res.status(400).json({ message: "Noto'g'ri ID formati" });
+        return res.status(400).json({ message: "Notogri ID formati" });
       }
       return res.status(500).json({ message: err.message });
     }
@@ -53,7 +53,7 @@ class ProductController {
       return res.json(product);
     } catch (err) {
       if (err.name === 'CastError') {
-        return res.status(400).json({ message: "Noto'g'ri ID formati" });
+        return res.status(400).json({ message: "Notogri ID formati" });
       }
       return res.status(500).json({ message: err.message });
     }
@@ -67,10 +67,10 @@ class ProductController {
         return res.status(404).json({ message: "Mahsulot topilmadi" });
       }
 
-      return res.json({ message: "Mahsulot o'chirildi" });
+      return res.json({ message: "Mahsulot ochirildi" });
     } catch (err) {
       if (err.name === 'CastError') {
-        return res.status(400).json({ message: "Noto'g'ri ID formati" });
+        return res.status(400).json({ message: "Notogri ID formati" });
       }
       return res.status(500).json({ message: err.message });
     }
