@@ -1,8 +1,53 @@
 # Backend Configuration
 
 ## Base URL
+Default: `http://localhost:9090` (Configurable via `PORT` environment variable)
 
-http://localhost:9090
+## Technologies
+- **Runtime:** Node.js
+- **Framework:** Express.js
+- **Database:** MongoDB (via Mongoose)
+- **CORS:** Enabled for all origins
+- **Development Tool:** Nodemon
+
+---
+
+# Getting Started (For Frontend Developers)
+
+If you need to run the backend locally:
+
+1. **Prerequisites:**
+   - Install [Node.js](https://nodejs.org/)
+   - Ensure you have a running [MongoDB](https://www.mongodb.com/) instance (local or Atlas)
+
+2. **Installation:**
+   ```bash
+   cd server
+   npm install
+   ```
+
+3. **Environment Setup:**
+   Create a `.env` file in the `server` directory and add the following:
+   ```env
+   PORT=9090
+   MONGO_URL=your_mongodb_connection_string
+   NODE_ENV=development
+   ```
+
+4. **Run Server:**
+   ```bash
+   npm run dev
+   ```
+   The server will restart automatically when you save changes.
+
+---
+
+# Project Structure
+- `src/index.js`: Entry point and middleware setup.
+- `src/routes/`: API route definitions.
+- `src/controllers/`: Business logic for each endpoint.
+- `src/models/`: Mongoose schemas (Data structure).
+- `src/config/`: Database connection configuration.
 
 ---
 
