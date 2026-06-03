@@ -62,7 +62,6 @@ export default function Navbar() {
       <div className="max-w-[1250px] mx-auto px-5 py-3 flex items-center gap-4">
         <Link to="/" className="flex items-center gap-2.5 shrink-0 group">
           <img src={logo} alt="Uzum Logo" className="h-8" />
-          <span className="text-uzum-purple font-bold text-lg transition-colors group-hover:text-uzum-purple-dark">Uzum</span>
         </Link>
 
         <button className="flex items-center gap-2 bg-[#F3EEFE] text-uzum-purple rounded-md px-[18px] py-2.5 text-sm font-bold whitespace-nowrap transition-all border-2 border-transparent hover:bg-uzum-purple hover:text-white hover:border-uzum-purple shrink-0">
