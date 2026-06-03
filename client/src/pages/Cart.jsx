@@ -99,7 +99,7 @@ const Cart = () => {
                   
                   <div className="flex items-center justify-between mt-4">
                     <div className="flex items-center border border-border rounded-lg overflow-hidden">
-                      <button onClick={() => updateQuantity(item.product._id, -1)} className="w-8 h-8 hover:bg-bg-secondary"><AiOutlineMinus /></button>
+                      <button onClick={() => item.quantity === 1 ? removeItem(item.product._id) : updateQuantity(item.product._id, -1)} className="w-8 h-8 hover:bg-bg-secondary"><AiOutlineMinus /></button>
                       <span className="w-10 text-center text-sm font-bold">{item.quantity}</span>
                       <button onClick={() => updateQuantity(item.product._id, 1)} className="w-8 h-8 hover:bg-bg-secondary"><AiOutlinePlus /></button>
                     </div>

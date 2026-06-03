@@ -38,13 +38,13 @@ export default function TopBar() {
               </div>
             )}
           </div>
-          <button className="text-text-secondary font-medium transition-colors hover:text-uzum-purple whitespace-nowrap">Topshirish punktlari</button>
+          <a href='https://uzuuzm2.vercel.app/' className="text-text-secondary font-medium transition-colors hover:text-uzum-purple whitespace-nowrap">Topshirish punktlari</a>
         </div>
 
         <div className="flex items-center gap-4">
           <button className="text-uzum-purple font-semibold transition-colors hover:text-uzum-purple-dark whitespace-nowrap">Sotuvchi bo'lish</button>
           <span className="text-border">|</span>
-          <button className="text-uzum-purple font-semibold transition-colors hover:text-uzum-purple-dark whitespace-nowrap">Topshirish punktini ochish</button>
+          <a href='https://uzuuzm2.vercel.app/' className="text-uzum-purple font-semibold transition-colors hover:text-uzum-purple-dark whitespace-nowrap">Topshirish punktini ochish</a>
           <button className="text-text-secondary font-medium transition-colors hover:text-uzum-purple whitespace-nowrap">Savol-javob</button>
           <Link to="/profile" className="text-text-secondary font-medium transition-colors hover:text-uzum-purple whitespace-nowrap">Buyurtmalarim</Link>
           <div className="flex items-center gap-1 cursor-pointer text-text-secondary font-medium p-1 px-2 rounded-sm transition-colors hover:bg-bg-secondary">

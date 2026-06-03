@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { AiOutlineHeart, AiFillHeart, AiOutlineShoppingCart } from 'react-icons/ai';
+import { AiOutlineHeart, AiFillHeart, AiOutlineShoppingCart, AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 
 const ProductCard = ({ product }) => {
   const { _id, title, price, oldPrice, images, rating, reviewsCount } = product;
   const [isFavorite, setIsFavorite] = useState(false);
-  const [isInCart, setIsInCart] = useState(false);
+  const [quantity, setQuantity] = useState(0);
   const [loading, setLoading] = useState(false);
 
   const currentUser = JSON.parse(localStorage.getItem('uzum_user') || 'null');
@@ -27,7 +27,8 @@ const ProductCard = ({ product }) => {
         const cartRes = await fetch(`${apiUrl}/carts/${currentUser._id}`);
         const cartData = await cartRes.json();
         if (cartData && cartData.items) {
-          setIsInCart(cartData.items.some(item => item.product._id === _id));
+          const item = cartData.items.find(item => item.product._id === _id);
+          setQuantity(item ? item.quantity : 0);
         }
       } catch (err) {
         console.error("Status check error:", err);
@@ -77,8 +78,46 @@ const ProductCard = ({ product }) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ userId: currentUser._id, productId: _id, quantity: 1 })
       });
-      setIsInCart(true);
+      setQuantity(1);
       window.dispatchEvent(new Event('storage')); // Trigger navbar update
+    } catch (err) {
+      console.error("Cart error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateQuantity = async (e, delta) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!currentUser || loading) return;
+
+    setLoading(true);
+    try {
+      await fetch(`${apiUrl}/carts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: currentUser._id, productId: _id, quantity: delta })
+      });
+      setQuantity(prev => prev + delta);
+      window.dispatchEvent(new Event('storage'));
+    } catch (err) {
+      console.error("Cart error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const removeItem = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!currentUser || loading) return;
+
+    setLoading(true);
+    try {
+      await fetch(`${apiUrl}/carts/${currentUser._id}/${_id}`, { method: 'DELETE' });
+      setQuantity(0);
+      window.dispatchEvent(new Event('storage'));
     } catch (err) {
       console.error("Cart error:", err);
     } finally {
@@ -141,17 +180,21 @@ const ProductCard = ({ product }) => {
             </span>
           </div>
           
-          <button 
-            onClick={addToCart}
-            disabled={loading}
-            className={`w-9 h-9 flex items-center justify-center rounded-full border transition-all disabled:opacity-50 ${
-              isInCart 
-                ? 'bg-uzum-purple text-white border-uzum-purple' 
-                : 'border-border hover:bg-[#F3EEFE] hover:border-uzum-purple hover:text-uzum-purple'
-            }`}
-          >
-            <AiOutlineShoppingCart size={20} />
-          </button>
+          {quantity > 0 ? (
+            <div className="flex items-center border border-uzum-purple rounded-lg overflow-hidden">
+              <button onClick={(e) => quantity === 1 ? removeItem(e) : updateQuantity(e, -1)} className="w-7 h-7 flex items-center justify-center hover:bg-bg-secondary text-xs disabled:opacity-50" disabled={loading}><AiOutlineMinus size={14} /></button>
+              <span className="w-7 text-center text-xs font-bold text-uzum-purple">{quantity}</span>
+              <button onClick={(e) => updateQuantity(e, 1)} className="w-7 h-7 flex items-center justify-center hover:bg-bg-secondary text-xs disabled:opacity-50" disabled={loading}><AiOutlinePlus size={14} /></button>
+            </div>
+          ) : (
+            <button 
+              onClick={addToCart}
+              disabled={loading}
+              className="w-9 h-9 flex items-center justify-center rounded-full border border-border hover:bg-[#F3EEFE] hover:border-uzum-purple hover:text-uzum-purple transition-all disabled:opacity-50"
+            >
+              <AiOutlineShoppingCart size={20} />
+            </button>
+          )}
         </div>
       </div>
     </div>

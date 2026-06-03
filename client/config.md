@@ -34,5 +34,4 @@ Barcha sevimlilar va savat ma'lumotlari endi `localStorage` o'rniga to'g'ridan-t
 - **Logo:** Logo rasm formatiga (`market-horizontal-logo.png`) o'tkazildi.
 - **Favicon:** Sayt ikonkasiga `market.png` o'rnatildi.
 
----
-*Eslatma: Backend kodiga hech qanday o'zgartirish kiritilmadi. Barcha mantiq backendda mavjud bo'lgan API endpointlar yordamida frontendda qayta yozildi.*
+

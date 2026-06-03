@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { AiOutlineHeart, AiFillHeart, AiFillStar, AiOutlineStar, AiOutlineUser } from 'react-icons/ai';
+import { AiOutlineHeart, AiFillHeart, AiFillStar, AiOutlineStar, AiOutlineUser, AiOutlineMinus, AiOutlinePlus } from 'react-icons/ai';
 import { HiOutlineShieldCheck } from 'react-icons/hi2';
 import { TbTruckDelivery } from 'react-icons/tb';
 
@@ -12,7 +12,7 @@ const ProductDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isFavorite, setIsFavorite] = useState(false);
-  const [quantity, setQuantity] = useState(1);
+  const [cartQuantity, setCartQuantity] = useState(0);
   const [actionLoading, setActionLoading] = useState(false);
 
   // Comment state
@@ -42,6 +42,13 @@ const ProductDetail = () => {
         const favData = await favRes.json();
         if (favData && favData.products) {
           setIsFavorite(favData.products.some(f => f._id === productData._id));
+        }
+
+        const cartRes = await fetch(`${apiUrl}/carts/${currentUser._id}`);
+        const cartData = await cartRes.json();
+        if (cartData && cartData.items) {
+          const item = cartData.items.find(item => item.product._id === productData._id);
+          setCartQuantity(item ? item.quantity : 0);
         }
       }
     } catch (err) {
@@ -89,10 +96,44 @@ const ProductDetail = () => {
       await fetch(`${apiUrl}/carts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ userId: currentUser._id, productId: product._id, quantity })
+        body: JSON.stringify({ userId: currentUser._id, productId: product._id, quantity: 1 })
       });
+      setCartQuantity(1);
       window.dispatchEvent(new Event('storage'));
-      alert("Savatga qo'shildi!");
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const updateCartQuantity = async (delta) => {
+    if (!currentUser || actionLoading) return;
+
+    setActionLoading(true);
+    try {
+      await fetch(`${apiUrl}/carts`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ userId: currentUser._id, productId: product._id, quantity: delta })
+      });
+      setCartQuantity(prev => prev + delta);
+      window.dispatchEvent(new Event('storage'));
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const removeCartItem = async () => {
+    if (!currentUser || actionLoading) return;
+
+    setActionLoading(true);
+    try {
+      await fetch(`${apiUrl}/carts/${currentUser._id}/${product._id}`, { method: 'DELETE' });
+      setCartQuantity(0);
+      window.dispatchEvent(new Event('storage'));
     } catch (err) {
       console.error(err);
     } finally {
@@ -181,24 +222,24 @@ const ProductDetail = () => {
           </div>
 
           <div className="flex flex-col gap-4 pt-4 mt-auto">
-            <div className="flex items-center gap-4">
-              <span className="text-sm font-semibold">Miqdor:</span>
-              <div className="flex items-center border border-border rounded-lg overflow-hidden">
-                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="w-10 h-10 hover:bg-bg-secondary">-</button>
-                <span className="w-12 text-center font-bold">{quantity}</span>
-                <button onClick={() => setQuantity(quantity + 1)} className="w-10 h-10 hover:bg-bg-secondary">+</button>
+            {cartQuantity > 0 ? (
+              <div className="flex items-center gap-4">
+                <span className="text-sm font-semibold">Miqdor:</span>
+                <div className="flex items-center border border-uzum-purple rounded-lg overflow-hidden">
+                  <button onClick={() => cartQuantity === 1 ? removeCartItem() : updateCartQuantity(-1)} disabled={actionLoading} className="w-10 h-10 flex items-center justify-center hover:bg-bg-secondary disabled:opacity-50"><AiOutlineMinus size={18} /></button>
+                  <span className="w-12 text-center font-bold text-uzum-purple">{cartQuantity}</span>
+                  <button onClick={() => updateCartQuantity(1)} disabled={actionLoading} className="w-10 h-10 flex items-center justify-center hover:bg-bg-secondary disabled:opacity-50"><AiOutlinePlus size={18} /></button>
+                </div>
               </div>
-            </div>
-
-            <div className="flex gap-3">
+            ) : (
               <button 
                 onClick={addToCart}
                 disabled={actionLoading}
-                className="flex-1 h-14 bg-uzum-purple text-white font-bold rounded-2xl hover:bg-uzum-purple-dark transition-all disabled:opacity-50"
+                className="w-full h-14 bg-uzum-purple text-white font-bold rounded-2xl hover:bg-uzum-purple-dark transition-all disabled:opacity-50"
               >
                 Savatga qo'shish
               </button>
-            </div>
+            )}
           </div>
         </div>
       </div>

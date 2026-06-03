@@ -58,8 +58,8 @@ export default function Navbar() {
   };
 
   return (
-    <nav className="bg-white border-b border-border sticky top-0 z-50 shadow-sm">
-      <div className="max-w-[1280px] mx-auto px-5 py-3 flex items-center gap-4">
+    <nav className="bg-white  top-0 z-50 ">
+      <div className="max-w-[1250px] mx-auto px-5 py-3 flex items-center gap-4">
         <Link to="/" className="flex items-center gap-2.5 shrink-0 group">
           <img src={logo} alt="Uzum Logo" className="h-8" />
           <span className="text-uzum-purple font-bold text-lg transition-colors group-hover:text-uzum-purple-dark">Uzum</span>

@@ -11,7 +11,7 @@ const Footer = () => {
           <div>
             <h3 className="font-bold text-base mb-4">Biz haqimizda</h3>
             <ul className="flex flex-col gap-3">
-              <li><button className="text-[13px] text-text-secondary hover:text-text-primary transition-colors">Topshirish punktlari</button></li>
+              <li><a href='https://uzuuzm2.vercel.app/' className="text-[13px] text-text-secondary hover:text-text-primary transition-colors">Topshirish punktlari</a></li>
               <li><button className="text-[13px] text-text-secondary hover:text-text-primary transition-colors">Vakansiyalar</button></li>
             </ul>
           </div>
